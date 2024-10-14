@@ -1,0 +1,108 @@
+<!-- FLAG LOCATION TIME-ZONE CONTINENT POPULATION LANGUAGE CURRENCY -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>country</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-dark" >
+    
+        <div class="container text-center" style="min-height: 100vh;" >
+        
+                 <h1 class="text-warning mt-5">know about contries</h1>
+       <div class="d-flex align-item-center justify-content-center mt-5">
+                <input id="userInput" type="text" class="form-control w-50" placeholder="enter a country name here!!!">
+                <button onclick="find()"class="btn btn-success ms-5"><i class="fa-solid fa-magnifying-glass"></i></button>
+       </div>
+       <div id="output" class="d-flex align-item-center justify-content-center mt-5 w-100  p-5" >
+ 
+   <!-- <div class="d-flex align-item-center justify-content-center mt-5 w-100  p-5" style="background-color: bisque;" >
+  <div class="row w-100">  -->
+   <!-- <div class="col-6">
+    <h3 class="text-danger">country Names</h3>
+       <img src="" alt="" width="300px" height="200px" ><br>
+       <a href="">click her view to google map</a>
+   </div>
+   <div class="col-6">
+    <ul class="list-group">
+        <li class="list-group-item"><span class="text-danger fw-bolder"> CAPITAL:</span></li>
+        <li class="list-group-item"><span class="text-danger fw-bolder"> POPULATION:</span></li>
+        <li class="list-group-item"><span class="text-danger fw-bolder"> TIME-ZONE :</span></li>
+        <li class="list-group-item"><span class="text-danger fw-bolder"> CONTINENT:</span></li>
+        <li class="list-group-item"><span class="text-danger fw-bolder">LANGUAGES:</span></li>
+        <li class="list-group-item"><span class="text-danger fw-bolder">CURRENCIES:</span></li>
+      </ul>
+   </div>
+  </div>
+  </div>  -->
+      </div>
+      </div>
+ 
+ 
+
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script>
+    const find=async()=>{
+        if (userInput.value!="") {
+            // alert("do  api call")
+            try{
+           const response= await fetch(`https://restcountries.com/v3.1/name/${userInput.value}?fullText=true`)
+        //    console.log(response);
+           
+           const result=await response.json()
+           if(result.status==404){
+            output.innerHTML=`<h3 class="text-danger"> country ${result.message}</h3> `
+           }
+           else{
+            console.log(result[0]);
+            const countryDetails =result[0]
+            console.log(Object.values(countryDetails.currencies)[0]);
+            
+            output.innerHTML=`<div class="d-flex align-item-center justify-content-center mt-5 w-100  p-5" style="background-color: bisque;" >
+  <div class="row w-100"> 
+   <div class="col-6">
+    <h3 class="text-danger">${countryDetails.name.common}</h3>
+       <img src="${countryDetails.flags.png}" alt="" width="300px" height="200px"><br>
+       <a href="${countryDetails.maps.googleMaps}">click here to view  google map</a>
+   </div>
+   <div class="col-6">
+    <ul class="list-group">
+        <li class="list-group-item"><span class="text-danger fw-bolder"> CAPITAL:</span>
+                                    <span class="text-secondary fw-bolder"> ${countryDetails.capital}</span> </li>
+        <li class="list-group-item"><span class="text-danger fw-bolder"> POPULATION:</span>
+                                    <span class="text-secondary fw-bolder">${countryDetails.population}</span></li>
+        <li class="list-group-item"><span class="text-danger fw-bolder"> TIME-ZONE:</span>
+                                    <span class="text-secondary fw-bolder">${countryDetails.timezones}</span></li>
+        <li class="list-group-item"><span class="text-danger fw-bolder"> CONTINENT:</span>
+                                    <span class="text-secondary fw-bolder">${countryDetails.continents}</span></li>
+        <li class="list-group-item"><span class="text-danger fw-bolder">LANGUAGES:</span>
+                                    <span class="text-secondary fw-bolder">${Object.values(countryDetails.languages)}</span></li>
+        <li class="list-group-item"><span class="text-danger fw-bolder">CURRENCIES:</span>
+                                    <span class="text-secondary fw-bolder">${Object.values(countryDetails.currencies)[0].symbol}-${Object.values(countryDetails.currencies)[0].name}</span>
+            </li>
+      </ul>
+   </div>
+  </div>
+  </div> `
+           }
+
+        }
+    
+       
+        catch(err){
+        console.log(err);
+        alert("api faild! try after some times")
+
+        }
+    }
+        else{
+            output.innerHTML=`<h3 class="text-danger">enter a valid country name</h3>`
+        }
+        }
+    
+</script>
+</html>
